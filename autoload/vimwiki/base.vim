@@ -2855,13 +2855,25 @@ function! s:normalize_link_syntax_v() abort
 
   " Replace space characters
   let sc = vimwiki#vars#get_wikilocal('links_space_char')
-  let link = substitute(link, '\s', sc, 'g')
+  let link = substitute(link, '\s', '_', 'g')
 
   " Replace description (used for markdown)
   let link = s:safesubstitute(link, '__LinkDescription__', visual_selection, '')
 
   " Remove newlines
   let link = substitute(link, '\n', '', '')
+  " ============================================================================
+  " === MY STUFF Add date and time to link/filename
+  " ============================================================================
+  " Get the current date in YYYY-MM-DD format
+  let current_date = strftime("%Y_%m_%d_%H:%M:%S")
+
+  " Perform the substitution using the substitute function
+  let link = substitute(link, '\v\[(.+)\]\((.+)\)', '[\1](\2_' . current_date . ')', '')
+
+  " ============================================================================
+  " === MY STUFF 
+  " ============================================================================
 
   " Paste result
   call vimwiki#u#get_selection(link)
