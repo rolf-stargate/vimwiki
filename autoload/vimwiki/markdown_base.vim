@@ -104,6 +104,19 @@ function! s:normalize_link_syntax_n() abort
             \ vimwiki#vars#get_global('rxWord'),
             \ vimwiki#vars#get_syntaxlocal('Link1'))
     endif
+    " ============================================================================
+    " === MY STUFF Add date and time to link/filename
+    " ============================================================================
+    " Get the current date in YYYY-MM-DD format
+    let current_date = strftime("%Y_%m_%d_%H:%M:%S")
+
+    " Perform the substitution using the substitute function
+    let sub = substitute(sub, '\v\[(.+)\]\((.+)\)', '[\1](\2_' . current_date . ')', '')
+
+    " ============================================================================
+    " === MY STUFF 
+    " ============================================================================
+
     call vimwiki#base#replacestr_at_cursor('\V'.lnk, sub)
     return
   endif
