@@ -2855,7 +2855,7 @@ function! s:normalize_link_syntax_v() abort
 
   " Replace space characters
   let sc = vimwiki#vars#get_wikilocal('links_space_char')
-  let link = substitute(link, '\s', '_', 'g')
+  let link = substitute(link, '\s', sc, 'g')
 
   " Replace description (used for markdown)
   let link = s:safesubstitute(link, '__LinkDescription__', visual_selection, '')
