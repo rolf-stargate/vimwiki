@@ -104,18 +104,25 @@ function! s:normalize_link_syntax_n() abort
             \ vimwiki#vars#get_global('rxWord'),
             \ vimwiki#vars#get_syntaxlocal('Link1'))
     endif
-    " ============================================================================
+    " ==========================================================================
     " === MY STUFF Add date and time to link/filename
-    " ============================================================================
-    " Get the current date in YYYY-MM-DD format
-    let current_date = strftime("%Y_%m_%d_%H:%M:%S")
+    " ==========================================================================
+    let charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let chars_len = strlen(charset)
+    let random_str = ''
+    
+    call srand(getftime(expand('%:p')))
+    for _ in range(1, 5)
+        let rand_index = rand() % chars_len
+        let random_str .= charset[rand_index]
+    endfor
+    
+    let wiki_name = vimwiki#vars#get_wikilocal("name")
 
-    " Perform the substitution using the substitute function
-    let sub = substitute(sub, '\v\[(.+)\]\((.+)\)', '[\1](\2_' . current_date . ')', '')
-
-    " ============================================================================
+    let sub = substitute(sub, '\v\[(.+)\]\((.+)\)', '[' . lnk . '](' . 'wn.' . wiki_name . ':' . random_str . ')', '')
+    " ==========================================================================
     " === MY STUFF 
-    " ============================================================================
+    " ==========================================================================
 
     call vimwiki#base#replacestr_at_cursor('\V'.lnk, sub)
     return
